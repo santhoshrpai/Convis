@@ -213,7 +213,6 @@ function search(){
 function mouseclick(d, i) {
 //	update(root);
 	document.location.reload(true);
-	//logInteraction("Refresh");
  //alert(d3.mouse(this));
 }
 
@@ -1197,7 +1196,6 @@ function drawAuthorText(){
 } 	
 	// if the user click a particular topic	
 	function clickTopic(link, selectMode) {
-		//logInteraction("ClickTopic"+","+link+","+selectMode+"\n");
 		commentsList = [];
         for (i = 0; i < nodes.length; i++) {
 			var isTopic=0;
@@ -1295,7 +1293,6 @@ function drawAuthorText(){
     }
 	
     function clickAuthor(name, selectMode) {
-		//logInteraction("ClickAuthor,"+author);
         commentsList = [];
         for (i = 0; i < nodes.length; i++) {
             if (nodes[i].author == name) {
@@ -1374,7 +1371,6 @@ function drawAuthorText(){
 	
 // Toggle children on click.
     function click(d) {
-		//logInteraction("ClickComment,"+d.commentid);
         for (i = 0; i < nodes.length; i++) {
             if (nodes[i].commentid == d.commentid) {
                 if (nodes[i].clickcomment == "1")
@@ -1439,7 +1435,6 @@ function drawAuthorText(){
      .attr("r", 2)
      .style("fill", "red");
 */
-//	logInteraction("ThreadMouseOver", d.commentid);
 	delete mouseOverLine1;
 	delete mouseOverLine2;
 	
@@ -1460,8 +1455,7 @@ function drawAuthorText(){
     }
 
 // mouse out from comment
-    function mouseout(d) {
-		logInteraction("ThreadMouseOut", d.commentid);	
+    function mouseout(d) {	
         undoHighlightCommentsbyAuthor(d.author);
 
 		//mouseOverLine1.remove();
@@ -1506,7 +1500,6 @@ function drawAuthorText(){
 	}	
 
     function highlightTopicsbyTopic(link) {
-		//logInteraction("HoverTopic,"+link);
         vis.selectAll(".circle")
                 .transition()
                 .duration(duration)
@@ -1683,7 +1676,6 @@ function drawAuthorText(){
         //.style("fill",function(d,i){	return d.col;})	;  
     }
    function highlightAuthorsbyAuthor(author) {
-	//	logInteraction("HoverAuthor,"+author);
         vis.selectAll("image")
                 .transition()
                 .duration(duration)
