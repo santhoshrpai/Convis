@@ -31,7 +31,7 @@ var QueryString = function () {
 
 filename=QueryString;
 //jsonFileMainView="data/"+filename+".json";
-jsonFileMainView="data/test.json";
+jsonFileMainView="data/convis_questions1.json";
 //jsonFileMainView=filename+".json";
 revisedTopicFile="revisdTopics.json";
 //alert(jsonFileMainView);
@@ -75,11 +75,14 @@ function parseNode(node) { // takes a node object and turns it into a <li>
 					var seconds = date.getSeconds();
 					var curr_month = date.getMonth() + 1; //Months are zero based		
 					node.date = "on "+ day+"-"+curr_month+"-"+year+" at "+hours + ':' + minutes + ':' + seconds+" ";
-					}	
-	var text="<div class=\"comment\""+"id=\"div"+node.commentid+"\"onmouseover=\"commentMouseOver("+node.commentid+")\""+
-					" onmouseout=\"commentMouseOut("+node.commentid+")\""+
+					}
+	console.log(node.commentid);
+	var imgsrc = getImgSrc("'"+node.commentid+"'");
+
+	var text="<div class=\"comment\""+"id=\"div"+node.commentid+"\"onmouseover=\"commentMouseOver('"+node.commentid+"','"+node.parent+"')\""+
+					" onmouseout=\"commentMouseOut('"+node.commentid+"','"+node.parent+"')\""+
 					" onclick=\"commentMouseClick("+node.commentid+")\" style=\"border:"+"0px;\">"+
-					"<div class=\"comment-author\"><img src=\"gravatar.gif\" /><a href=\"/\"  style=\"color: rgb(152, 78, 163)\">"+
+					"<div class=\"comment-author\"><img src=\""+imgsrc+"\" /><a href=\"/\"  style=\"color: rgb(152, 78, 163)\">"+
 					node.author+"</a>"+
 					drawSentimentbar(node)+
 					"</div><div class=\"comment-body\""+"id=\"comment"+node.commentid+"\"><p>"+
@@ -93,6 +96,15 @@ function parseNode(node) { // takes a node object and turns it into a <li>
     //	li.className = node.class;
     if(node.children) li.appendChild(parseNodes(node.children));
     return li;
+}
+
+function getImgSrc(id) {
+	console.log("I am in------------"+id);
+	if(id.startsWith('\'a')) {
+		return 'answer.png';
+	} else {
+		return 'question.jpg';
+	}
 }
 
 function drawSentimentbar(node) {
@@ -117,31 +129,42 @@ function drawSentimentLegend() {
 	var totalWidth=100;
 	var polaritywidth=(0.2)*totalWidth;
 	var sentimentbar="<table border=\"0\" cellpadding=\"1\"><tr style=\"height:5px;width:100px\">";	 
-	sentimentbar+="<td align=right><font size=\"1\">Highly Negative</font> </td>";	 
+	sentimentbar+="<td align=right><font size=\"1\">Highly Coherent</font> </td>";	 
 	sentimentbar+="<td style=\"background-color:"+"rgb("+sentimentColors[4]+")"+";\" width=\""+polaritywidth+"px; \"></td>";	 
 	sentimentbar+="<td style=\"background-color:"+"rgb("+sentimentColors[3]+")"+";\" width=\""+polaritywidth+"px;\"></td>";	 
 	sentimentbar+="<td style=\"background-color:"+"rgb("+sentimentColors[2]+")"+";\" width=\""+polaritywidth+"px;\"></td>";	 
 	sentimentbar+="<td style=\"background-color:"+"rgb("+sentimentColors[1]+")"+";\" width=\""+polaritywidth+"px;\"></td>";	 
 	sentimentbar+="<td style=\"background-color:"+"rgb("+sentimentColors[0]+")"+";\" width=\""+polaritywidth+"px;\"></td>";
-	sentimentbar+="<td><font size=\"1\">Highly Positive</font> </td>";	 
+	sentimentbar+="<td><font size=\"1\">Highly Coherent</font> </td>";	 
 	sentimentbar+="</tr></table>";
 
 	return sentimentbar;
 }
 
-	function commentMouseOver(commentid){
+if (typeof String.prototype.startsWith != 'function') {
+  String.prototype.startsWith = function (str){
+    return this.slice(0, str.length) == str;
+  };
+}
+
+	function commentMouseOver(commentid,parent){
 		//alert("hellow world");
+		if(commentid.startsWith('a')) {
+			if(parent!=null) {
+			commentid = parent;
+			}
+		}
 		$("#div"+commentid).css("border-top", "2px solid");
 		$("#div"+commentid).css("border-bottom", "2px solid");
 		var node;
         for (i = 0; i < nodes.length; i++) {
-            if (nodes[i].commentid == commentid) {
+            if (nodes[i].commentid === commentid) {
 				node=nodes[i];
                 break;
             }
         }
 		//logInteraction("CommentMouseOver"+","+node.commentid+"\n");
-		drawLineMouseOver(node);
+		//drawLineMouseOver(node);
 		/*nodeEnter.transition()
 		.duration(0)
 		.selectAll("rect")
@@ -170,9 +193,13 @@ function drawSentimentLegend() {
 		 	
 	}
 	
-	function commentMouseOut(commentid){
-		//alert(commentid);
-		//logInteraction("CommentMouseOut"+","+commentid+"\n");				
+	function commentMouseOut(commentid,parent){	
+
+		if(commentid.startsWith('a')) {
+			if(parent!=null) {
+			commentid = parent;
+			}
+		}		
 		
 		vis.selectAll("line").remove();
 		$("#div"+commentid).css("border-top", "0px solid");		
@@ -186,7 +213,7 @@ function drawSentimentLegend() {
         }	
 		//undoHighlightTopicLinks();	
 		//undoHighlightAuthorsLinks();	
-        undoHighlightCommentsbyAuthor(nodeMouseOut.author);			
+        // undoHighlightCommentsbyAuthor(nodeMouseOut.author);			
 		//if($("#div"+commentid).attr('style').indexOf("rgb")==-1)
 		
 		

@@ -30,96 +30,9 @@
                 <td align="top">
                     <div id="chart">
                         <script>
-	filename="";						
-	interfaceName="C";
+	filename="";
 
-	function highlightme()
-					 {
-						//setTimeout(performSearch, 300);
-						//alert("test");
-						//function performSearch() {
-							var str=document.getElementById('search').value;
-							if(str==""){
-								$('#content').removeHighlight(); return;}
-							else if (str.length < 3) { return;}
-							var strarray=str.split(" ");
-							void($('#content').removeHighlight().highlight(strarray)); //pass string array to function
-						//}
-					 }
-									$(function() {
-				
-				var self = this;
-				self.input = $("#search").select().focus();
-				
-			    //handles searching the document
-				self.performSearch = function() {
-					//alert("yes");
-					//create a search string
-					var phrase = self.input.val().replace(/^\s+|\s+$/g, "");					
-					phrase = phrase.replace(/\s+/g, "|");
-					
-					//make sure there are a couple letters
-					//if (phrase.length < 3) { return; }			
-					
-					//append the rest of the expression
-					phrase = ["\\b(", phrase, ")"].join("");
-					
-					//search for any matches
-					var count = 0;
-					$("#content").each(function(i, v) {
-					
-						//replace any matches
-						var block = $(v);
-						block.html(
-							
-							block.text().replace(
-								
-								new RegExp(phrase, "gi"),
-								
-								function(match) {
-									count++;
-									//alert(match);
-									return ["<span class='highlight'>", match, "</span>"].join("");
-								}));
-					});
-					
-					//update the count					
-					$(".result-count").text(count + " results found!");
-					
-					//clear this search attempt
-					//should be gone anyways...
-					self.search = null;
-				
-				};
-			
-				self.search;
-				self.input.keyup(function(e) {
-					if (self.search) { clearTimeout(self.search); }
-					
-					//start a timer to perform the search. On browsers like
-					//Chrome, Javascript works fine -- other less performant
-					//browsers like IE6 have a hard time doing this
-					self.search = setTimeout(self.performSearch, 300);
-					
-				});
-			
-			});
-		
- 
-		window.onload = function(){ 
-			//Get submit button
-			var submitbutton = document.getElementById("search");
-			//Add listener to submit button
-			if(submitbutton.addEventListener){
-				submitbutton.addEventListener("click", function() {
-					if (submitbutton.value == 'Search'){//Customize this text string to whatever you want
-						submitbutton.value = '';
-					}
-				});
-			}
-			
-		}
-
+	
 // Possible color families
 /*colorFamily = [
     ["241,89,95", "121,195,106", "89,154,211", "249,166,90", "158,102,171"],
@@ -130,16 +43,16 @@
     ["205,112,88", "121,195,106", "215,127,179", "89,154,211", "241, 89,95"]
 ];*/
 
-/*sentimentColors = [
+sentimentColors = [
     "215, 25, 28",
     //"253, 174, 97",
     "239, 165, 165",
     "255, 255, 191",
     "166, 217, 106",
     "26, 150, 65"
-];*/
+];
 //purple- orange
-sentimentColors = [
+/*sentimentColors = [
     "230, 97, 1",
     "253, 184, 99",
     "240, 240, 240",	 
@@ -147,7 +60,7 @@ sentimentColors = [
 	"170, 163, 205",
     //"94, 60, 153"
 	"125,87,189"
-];
+];*/
 
 topicColor="rgb(0, 71, 157)";
 authorColor= "rgb(152, 78, 163)";	
@@ -205,18 +118,13 @@ var rect = vis.append("rect")
 	.attr("transform", "translate(-368,0)")
     .on("click", mouseclick);
 
-function search(){
-	alert("hello");
-	
-	
-}	
 function mouseclick(d, i) {
 //	update(root);
 	document.location.reload(true);
  //alert(d3.mouse(this));
 }
 
-d3.json("data/test.json", function(json) {
+d3.json("data/convis_questions1_woans.json", function(json) {
     json.x0 = 0;
     json.y0 = 0;
 
@@ -233,7 +141,7 @@ commentsList = [];
 
 function update(source) {
 
-    // Compute the flattened node list. TODO use d3.layout.hierarchy.
+   // Compute the flattened node list. TODO use d3.layout.hierarchy.
     nodes = tree.nodes(root);
     var commentHeight = new Array();
     var topicShift = 0;
@@ -304,7 +212,7 @@ function update(source) {
                 {
                     //alert(root.topics[j].topicID);
                     for (k = 0; k < root.topics[j].labels.length; k++) {
-                        //alert(root.topics[j].labels[k].phrase);
+                        // alert(root.topics[j].labels[k].phrase);
                         var words = root.topics[j].labels[k].phrase.split(" ");
                         for (w = 0; w < words.length; w++) {
                             if (nodes[i].sent[s].sent.indexOf(words[w]) >= 0){
@@ -342,12 +250,11 @@ function update(source) {
 
     }
 
-    //alert(topicLinks);
+   // alert(topicLinks);
     // Compute the "layout".
     nodes.forEach(function(n, i) {
         height = 0;
         for (j = 0; j < i; j++) {
-            //alert(JSON.strinify());
             height += commentHeight[j];
         }
         n.x = height;
@@ -377,17 +284,17 @@ function update(source) {
 	
 
 	//method 1: alphabetic order
-/*	root.topics.sort(function(a, b) {			
+	root.topics.sort(function(a, b) {			
 			if(a.labels[0].phrase < b.labels[0].phrase)
 				return 1;
 			else if (a.labels[0].phrase > b.labels[0].phrase)
 				return -1;
 			return 0;
         });	
-*/
+
 	//method 2: Chronology of topic
 	//WARNING: this code for sorting is highly unoptimized	
-	root.topics.sort(function(a, b) {
+	/*root.topics.sort(function(a, b) {
 
 		for(i=0;i<nodes.length;i++){			
 			
@@ -404,7 +311,7 @@ function update(source) {
 			
 		}
 			return aComesFirst;
-        });	
+        });	*/
 
 	for (j = 0; j < root.topics.length; j++) {
         var topicLabel = root.topics[j].labels[0].phrase;
@@ -532,36 +439,7 @@ function update(source) {
 
     // Enter any new nodes at the parent's previous position.
 
-    //draw sentiment bars
-
-    /*nodeEnter.append("svg:rect")
-     .attr("y", -barHeight / 2)
-     //.attr("height", barHeight)
-     .attr("height", findCommentHeight)
-     .attr("width", function (d){
-     return barWidth+100;
-     })
-     .style("fill", "rgb(255,255,255)")
-     //.style("opacity", opacity)
-     .on("click", click);
-     */
-    /*  nodeEnter.append("svg:line")
-     .attr("y1",  -barHeight / 2-.1)
-     //.attr("height", barHeight)
-     .attr("x2", function (d){	
-     //alert(d.topicShift);
-     return barWidth+100;
-     })
-     .attr("y2",  -barHeight / 2)
-     .style("stroke", function (d){
-     colorLine="rgb(255,255,255)";
-     if(d.topicShift==1)
-     colorLine="rgb(0,0,0)";
-     return colorLine;})
-     .style("stroke-width","1.0px");
-     */
-	
-	topicSelector=nodeEnter.append("svg:rect")
+    topicSelector=nodeEnter.append("svg:rect")
         .attr("commentid", function(d) {
 			return d.commentid;
 		})
@@ -1218,7 +1096,8 @@ function drawAuthorText(){
 			}
         }
 		// draw border around comments in thread view
-        /*nodeEnter.transition()
+        //added-jumba
+        nodeEnter.transition()
                 .duration(0)
                 .selectAll("rect")
 				//.style("stroke","rgb(0, 71, 157)")	
@@ -1239,7 +1118,8 @@ function drawAuthorText(){
                 }
             }
             return stroke;
-        });*/
+        });
+        //added-jumba
 		
 		
 		topicSelector.transition()
@@ -2087,12 +1967,15 @@ function opacity(d) {
     return opacity;
 }
 function findCommentHeight(d) {
-    if (d.sent.length * 2 < minimumbarHeight)
-        return minimumbarHeight;
-    else if (d.sent.length * 2 > 20)
-        return maximumbarHeight;
-    else
-        return d.sent.length * 2;
+    if(d.sent!=null) {
+        if (d.sent.length * 2 < minimumbarHeight)
+            return minimumbarHeight;
+        else if (d.sent.length * 2 > 20)
+            return maximumbarHeight;
+        else
+            return d.sent.length * 2;
+        }
+    return minimumbarHeight;
 }
 function showCommentTooltip(d) {
     return d.sent[0].sent + "...";
