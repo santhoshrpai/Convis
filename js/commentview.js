@@ -61,22 +61,7 @@ function parseNode(node) { // takes a node object and turns it into a <li>
 		//alert("length"+nodes.length);
 		sentences+=node.sent[i].sent+" ";
     }
-				//alert(jsonObj[0].domain);
-					if(jsonObj[0].domain=="slashdot"){
-					//alert("yes");
-					var date = new Date(parseInt(node.date));
-					// hours part from the timestamp
-					var day=date.getDate();
-					var year=date.getFullYear();
-					var hours = date.getHours();
-					// minutes part from the timestamp
-					var minutes = date.getMinutes();
-					// seconds part from the timestamp
-					var seconds = date.getSeconds();
-					var curr_month = date.getMonth() + 1; //Months are zero based		
-					node.date = "on "+ day+"-"+curr_month+"-"+year+" at "+hours + ':' + minutes + ':' + seconds+" ";
-					}
-	console.log(node.commentid);
+				
 	var imgsrc = getImgSrc("'"+node.commentid+"'");
 
 	var text="<div class=\"comment\""+"id=\"div"+node.commentid+"\"onmouseover=\"commentMouseOver('"+node.commentid+"','"+node.parent+"')\""+
@@ -99,7 +84,6 @@ function parseNode(node) { // takes a node object and turns it into a <li>
 }
 
 function getImgSrc(id) {
-	console.log("I am in------------"+id);
 	if(id.startsWith('\'a')) {
 		return 'answer.png';
 	} else {
@@ -125,18 +109,20 @@ function drawSentimentbar(node) {
 	return sentimentbar;
 }
 
-function drawSentimentLegend() {
+function drawSentimentLegend(filter) {
 	var totalWidth=100;
 	var polaritywidth=(0.2)*totalWidth;
-	var sentimentbar="<table border=\"0\" cellpadding=\"1\"><tr style=\"height:5px;width:100px\">";	 
-	sentimentbar+="<td align=right><font size=\"1\">Highly Coherent</font> </td>";	 
-	sentimentbar+="<td style=\"background-color:"+"rgb("+sentimentColors[4]+")"+";\" width=\""+polaritywidth+"px; \"></td>";	 
-	sentimentbar+="<td style=\"background-color:"+"rgb("+sentimentColors[3]+")"+";\" width=\""+polaritywidth+"px;\"></td>";	 
-	sentimentbar+="<td style=\"background-color:"+"rgb("+sentimentColors[2]+")"+";\" width=\""+polaritywidth+"px;\"></td>";	 
-	sentimentbar+="<td style=\"background-color:"+"rgb("+sentimentColors[1]+")"+";\" width=\""+polaritywidth+"px;\"></td>";	 
-	sentimentbar+="<td style=\"background-color:"+"rgb("+sentimentColors[0]+")"+";\" width=\""+polaritywidth+"px;\"></td>";
-	sentimentbar+="<td><font size=\"1\">Highly Coherent</font> </td>";	 
-	sentimentbar+="</tr></table>";
+	var sentimentbar="<table><tr style=\"height:3px;width:100px\">"; 
+	sentimentbar+="<td align=center width=\"2%\"><font size=\"1\">Less "+ filter +"</font> </td>";	 
+	sentimentbar+="<td width=\"2%\" style=\"background-color:"+"rgb("+sentimentColors[4]+")"+";\" width=\""+polaritywidth+"px; \"></td>";	 
+	sentimentbar+="<td width=\"2%\" style=\"background-color:"+"rgb("+sentimentColors[3]+")"+";\" width=\""+polaritywidth+"px;\"></td>";	 
+	sentimentbar+="<td width=\"2%\" style=\"background-color:"+"rgb("+sentimentColors[2]+")"+";\" width=\""+polaritywidth+"px;\"></td>";	 
+	sentimentbar+="<td width=\"2%\" style=\"background-color:"+"rgb("+sentimentColors[1]+")"+";\" width=\""+polaritywidth+"px;\"></td>";	 
+	sentimentbar+="<td width=\"2%\" style=\"background-color:"+"rgb("+sentimentColors[0]+")"+";\" width=\""+polaritywidth+"px;\"></td>";
+	sentimentbar+="<td width=\"2%\" align=center><font size=\"1\">Highly "+filter+"</font> </td>";
+	sentimentbar+="<td width=\"2%\"/>";
+	sentimentbar+="<td width=\"2%\"/>";
+	sentimentbar+="<td width=\"82%\"/></tr></table>";	
 
 	return sentimentbar;
 }
@@ -148,7 +134,6 @@ if (typeof String.prototype.startsWith != 'function') {
 }
 
 	function commentMouseOver(commentid,parent){
-		//alert("hellow world");
 		if(commentid.startsWith('a')) {
 			if(parent!=null) {
 			commentid = parent;
@@ -163,30 +148,14 @@ if (typeof String.prototype.startsWith != 'function') {
                 break;
             }
         }
-		//logInteraction("CommentMouseOver"+","+node.commentid+"\n");
-		//drawLineMouseOver(node);
-		/*nodeEnter.transition()
-		.duration(0)
-		.selectAll("rect")
-		.style("stroke-width",function(s,i){			
-			//alert("yes");
-			var stroke="0.15px";
-			if(commentid==s.commentid){
-				stroke="2px";
-				//alert("yes"+$("#div"+s.commentid).attr('style'));
-				if($("#div"+s.commentid).attr('style').indexOf("rgb")==-1){
-
-				}
-			}
-			else if(s.clickstate=="1") {stroke="2px";}
-			return stroke;
-			});
- 		*/
+		
+		drawLineMouseOver(node);
+		
         commentsList = [];
         commentsList.push(node.commentid);
 		//a();
 		//alert(commentsList.length);
-        highlightAuthorsbytopic("dummy");
+        //highlightAuthorsbytopic("dummy");
         highlightAuthorsLinks();
         highlightTopicsbyAuthor(node.author);
         highlightTopicLinks();		
@@ -211,26 +180,11 @@ if (typeof String.prototype.startsWith != 'function') {
                 break;
             }
         }	
-		//undoHighlightTopicLinks();	
-		//undoHighlightAuthorsLinks();	
-        // undoHighlightCommentsbyAuthor(nodeMouseOut.author);			
-		//if($("#div"+commentid).attr('style').indexOf("rgb")==-1)
+        undoHighlightCommentsbyAuthor(nodeMouseOut.author);
+		// undoHighlightAuthorsLinks();
+		// undoHighlightTopicLinks();	
+        //undoHighlightCommentsbyAuthor(nodeMouseOut.author);			
 		
-		
-
-		
-		/*nodeEnter.transition()
-		.duration(0)
-		.selectAll("rect")
-		.style("stroke-width",function(s,i){
-			
-			var stroke="0.15px";
-			if(s.clickstate=="1") {
-				stroke="2px";
-				$("#div"+s.commentid).css("border", "2px solid");
-			}
-			return stroke;
-			});		*/
 	}
 
 	function commentMouseClick(commentid){
@@ -271,7 +225,6 @@ if (typeof String.prototype.startsWith != 'function') {
                             "<a href=\"#" + node.parent + "\">" + node.title + ":</a>" + " " +
                             node.colorText +
                             "</p>");	
-						//logInteraction("CommentMouseClick"+","+node.commentid+"\n");	
 					}
 			}
 			//else if(s.clickstate=="1") {stroke="2px";}
@@ -284,16 +237,15 @@ if (typeof String.prototype.startsWith != 'function') {
 
 	
 	$.getJSON(jsonFileMainView, function(data) {
-				data="["+JSON.stringify(data)+"]"; //add damm bracket
-				//alert(data);
+				data="["+JSON.stringify(data)+"]"; 
 				jsonObj=JSON.parse(data);		// get back to json object again
 				da=parseNodes(jsonObj);
 				document.getElementById("content").appendChild(da);
 
  				var legendDiv = document.getElementById("sentiment_legend");
-				var legendHTML = drawSentimentLegend();	
+				var legendHTML = drawSentimentLegend('Coherent');	
 				//alert(legendHTML);
-				legendDiv.innerHTML=drawSentimentLegend();
+				legendDiv.innerHTML= legendHTML;
 	});
 
 

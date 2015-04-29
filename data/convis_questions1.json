@@ -3844,7 +3844,7 @@
             "systemtopicid": 6,
             "sentimentwords": [],
             "sentid": "",
-            "systemlabel": "Hibernate",
+            "systemlabel": "JSON",
             "linePolarity": -0.544,
             "sent": " for  instance  methods  i don't think it would make sense for them to be cached. you'd have to cache one method per instance... which would either mean an extra field within the class associated with the method - one per public method  presumably  because the methods could be referenced from outside the class - or cached within the  user  of the method reference  in which case you'd need some sort of per-instance cache.    i think it makes more sense for method references to  static  methods to be cached  because they'll be the same forever. however  to cache the actual    you'd need a cache per type that it was targeting. for example:         should   and   be equal here? how would the compiler know what type to create  if so? it could create two instances here and cache them separately - and always cache at the point of use rather than the point of method declaration. (your example has the same class declaring the method and referencing it  which is a very special case. you should consider the more general case where they're different>)    the jls  allows  for method references to be cached. from  section 15.13.3 :        next  either a new instance of a class with the properties below is allocated and initialized  or an existing instance of a class with the properties below is referenced.      ... but even for static methods  it seems   doesn't do any caching at the moment.  "
           }
@@ -3861,7 +3861,7 @@
             "systemtopicid": 6,
             "sentimentwords": [],
             "sentid": "",
-            "systemlabel": "Hibernate",
+            "systemlabel": "JSON",
             "linePolarity": -0.544,
             "sent": " in this simple case  you could do as you suggest by creating extra static or instance fields as appropriate  more complex if the lambda refers to objects  however the intent is to inline these instances out of existence e.g.         should be as efficient (even creating no more objects than)         it can eliminate the objects by inlining the stream code and using escape analysis to remove the need to create objects in the first place.    for this reason there has been little focus on implementing equals()  hashcode() or tostring()  accessing them via reflection for closures.  afaik  this deliberate to avoid the objects being using in ways not intended.  "
           }
@@ -3878,7 +3878,7 @@
             "systemtopicid": 6,
             "sentimentwords": [],
             "sentid": "",
-            "systemlabel": "Hibernate",
+            "systemlabel": "JSON",
             "linePolarity": -0.544,
             "sent": " making methods singletons will require to synchronize acquiring a reference to them. this gives a big overhead for such a simple operation with unpredictable result. the other solution is to create object for each method on class loading  but this results in many redundant objects  because only few method require referencing. i think synchronization is the main issue.  "
           }
@@ -3893,7 +3893,7 @@
         "systemtopicid": 6,
         "sentimentwords": [],
         "sentid": "",
-        "systemlabel": "Hibernate",
+        "systemlabel": "JSON",
         "linePolarity": -0.544,
         "sent": " in java  the following code returns false on both queries. why? wouldn't it be simpler for method references to be singleton? it would certainly make attaching and detaching listeners a lot simpler. as it is you need to keep a constant for any method reference that will need to be equivalence checked  you can't just use the method reference operator at every necessary location.       "
       }
@@ -5731,7 +5731,7 @@
             "systemtopicid": 6,
             "sentimentwords": [],
             "sentid": "",
-            "systemlabel": "Hibernate",
+            "systemlabel": "JSON",
             "linePolarity": 0.6680000000000001,
             "sent": " use the   method and keep only the current value:       "
           }
@@ -5748,7 +5748,7 @@
             "systemtopicid": 6,
             "sentimentwords": [],
             "sentid": "",
-            "systemlabel": "Hibernate",
+            "systemlabel": "JSON",
             "linePolarity": 0.6680000000000001,
             "sent": " this heavily depends on the nature of the  . keep in mind that ?simple? doesn?t necessarily mean ?efficient?. if you suspect the stream to be very large  carrying heavy operations or having a source which knows the size in advance  the following might be substantially more efficient than the simple solution:         you may illustrate the difference with the following example:         it will print:         in other words  it did not perform the operation on the first 9999999 elements but only on the last one.  "
           }
@@ -5765,7 +5765,7 @@
             "systemtopicid": 6,
             "sentimentwords": [],
             "sentid": "",
-            "systemlabel": "Hibernate",
+            "systemlabel": "JSON",
             "linePolarity": 0.6680000000000001,
             "sent": " this is just a refactoring of  holger 's answer because the code  while fantastic  is a bit hard to read/understand  especially for people who were not c programmers before java. hopefully my refactored example class is a little easier to follow for those who are not familiar with spliterators  what they do  or how they work.       "
           }
@@ -5782,7 +5782,7 @@
             "systemtopicid": 6,
             "sentimentwords": [],
             "sentid": "",
-            "systemlabel": "Hibernate",
+            "systemlabel": "JSON",
             "linePolarity": 0.6680000000000001,
             "sent": " here is another solution (not that efficient):       "
           }
@@ -5799,7 +5799,7 @@
             "systemtopicid": 6,
             "sentimentwords": [],
             "sentid": "",
-            "systemlabel": "Hibernate",
+            "systemlabel": "JSON",
             "linePolarity": 0.6680000000000001,
             "sent": " not as elegant  but probably best performing:       "
           }
@@ -5816,7 +5816,7 @@
             "systemtopicid": 6,
             "sentimentwords": [],
             "sentid": "",
-            "systemlabel": "Hibernate",
+            "systemlabel": "JSON",
             "linePolarity": 0.6680000000000001,
             "sent": "   don't necessarily have an order  meaning that the last element might not even be defined; the order is given by their source. for example if the stream is created from a    then there's no order. moreover  even if a   is ordered  it doesn't assure that all the operations acted upon it will be applied on the stream's element in that order.    actually  parallel streams perform better if they are not ordered and   provides  a method  returning the same stream but unordered.     http://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html#ordering     since   does not provide a method   the only way last element makes sense is to   the stream into an ordered  :         this is also the most efficient in terms of cpu consumption  because it's o(1) instead of o(n). on the other hand it takes more memory. i obtained the following results:         edit: if you look at how   is implemented you see it instantiates   which besides other parameters it takes a   that takes 2   and combines them adding all the elements from one to another  . in order to improve memory consumption and not allocate the whole   one might provide a different   meaning the collected stream would return a list with just one element  the last one.         there are two problems with this though:   is not   and i have not tested to see if it's functionally correct.  "
           }
@@ -5831,7 +5831,7 @@
         "systemtopicid": 6,
         "sentimentwords": [],
         "sentid": "",
-        "systemlabel": "Hibernate",
+        "systemlabel": "JSON",
         "linePolarity": 0.6680000000000001,
         "sent": " stream doesn't have a   method:         so what's the most elegant and or efficient way to get the last element or null for an empty stream?  "
       }
@@ -7077,7 +7077,7 @@
             "systemtopicid": 6,
             "sentimentwords": [],
             "sentid": "",
-            "systemlabel": "Hibernate",
+            "systemlabel": "JSON",
             "linePolarity": -0.8759999999999999,
             "sent": " i don't know    but in java varargs is just an array.     so in java it will work this way  with one warning:         may be if you can fool   the same way  you will overcome the bug.  "
           }
@@ -7094,7 +7094,7 @@
             "systemtopicid": 6,
             "sentimentwords": [],
             "sentid": "",
-            "systemlabel": "Hibernate",
+            "systemlabel": "JSON",
             "linePolarity": -0.8759999999999999,
             "sent": " one way to achieve what you want is to define interface in java as follows         and then to define the implementation normally in scala as follows         scala compiler will recognize that it needs to generate vargs style method and will generate both varargs and seq implementation.    javap output is as you would expect       "
           }
@@ -7109,7 +7109,7 @@
         "systemtopicid": 6,
         "sentimentwords": [],
         "sentid": "",
-        "systemlabel": "Hibernate",
+        "systemlabel": "JSON",
         "linePolarity": -0.8759999999999999,
         "sent": " scala provides a    annotation  that generates a java varargs forwarder method  which makes it possible to write something like this:         and then to call this method from java without needing to create a  :         which is pretty nice.    unfortunately the forwarding part doesn't seem to happen when the method is abstract:         now if we have this java code:         we get this exception (at runtime):         we can confirm the problem with  :         so nope  the forwarder definitely isn't getting implemented.    putting the annotation on both   methods fails to compile:         and of course putting the annotation only on the   in   means we can't use the forwarder from a   instance.    this seems like it must be a bug  but it also seems extremely easy to run into  and i'm not seeing anything in the issue tracker. am i using   correctly? if so  is there a workaround that would make it do what you'd expect here?  "
       }

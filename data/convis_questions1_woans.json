@@ -16,7 +16,7 @@
 
 {"topicID":2,"strength":7,"labels":[{"phrase":"Loops","prob":0.367826820806},{"phrase":"function","prob":0.261955329161},{"phrase":"While","prob":0.260373021189},{"phrase":"init","prob":0.0552599084916},{"phrase":"remove","prob":0.0545849203523}]},
 {"topicID":3,"strength":8,"labels":[{"phrase":"Servlets","prob":0.170144009755},{"phrase":"Tomcat","prob":0.170144009755},{"phrase":"Deploy","prob":0.164927995123},{"phrase":"invoke","prob":0.164927995123},{"phrase":"Util","prob":0.164927995123},{"phrase":"Apache","prob":0.164927995123}]},
-{"topicID":4,"strength":80,"labels":[{"phrase":"Multithreading","prob":0.166666666667},{"phrase":"write","prob":0.166666666667},{"phrase":"produce","prob":0.166666666667},{"phrase":"complete","prob":0.166666666667},{"phrase":"execute","prob":0.166666666667},{"phrase":"single","prob":0.166666666667}]},
+{"topicID":4,"strength":80,"labels":[{"phrase":"MultiThreading","prob":0.166666666667},{"phrase":"write","prob":0.166666666667},{"phrase":"produce","prob":0.166666666667},{"phrase":"complete","prob":0.166666666667},{"phrase":"execute","prob":0.166666666667},{"phrase":"single","prob":0.166666666667}]},
 {"topicID":5,"strength":20,"labels":[{"phrase":"Variables","prob":0.2},{"phrase":"size","prob":0.2},{"phrase":"number","prob":0.2},{"phrase":"character","prob":0.2},{"phrase":"byte","prob":0.2}]},
 {"topicID":6,"strength":7,"labels":[{"phrase":"JSON","prob":0.256645974355},{"phrase":"document","prob":0.186113412342},{"phrase":"parse","prob":0.186113412342},{"phrase":"null","prob":0.186034061379},{"phrase":"Annotation","prob":0.185093139582}]},
 {"topicID":7,"strength":7,"labels":[{"phrase":"Inheritance","prob":0.409374558127},{"phrase":"implement","prob":0.409374558127},{"phrase":"interface","prob":0.0604169612483},{"phrase":"subclass","prob":0.0604169612483},{"phrase":"instantiate","prob":0.0604169612483}]},
@@ -955,7 +955,7 @@
         "systemtopicid": 6,
         "sentimentwords": [],
         "sentid": "",
-        "systemlabel": "Hibernate",
+        "systemlabel": "JSON",
         "linePolarity": -0.544,
         "sent": " in java  the following code returns false on both queries. why? wouldn't it be simpler for method references to be singleton? it would certainly make attaching and detaching listeners a lot simpler. as it is you need to keep a constant for any method reference that will need to be equivalence checked  you can't just use the method reference operator at every necessary location.       "
       }
@@ -1601,7 +1601,7 @@
         "systemtopicid": 6,
         "sentimentwords": [],
         "sentid": "",
-        "systemlabel": "Hibernate",
+        "systemlabel": "JSON",
         "linePolarity": 0.6680000000000001,
         "sent": " stream doesn't have a   method:         so what's the most elegant and or efficient way to get the last element or null for an empty stream?  "
       }
@@ -1943,7 +1943,7 @@
         "systemtopicid": 6,
         "sentimentwords": [],
         "sentid": "",
-        "systemlabel": "Hibernate",
+        "systemlabel": "JSON",
         "linePolarity": -0.8759999999999999,
         "sent": " scala provides a    annotation  that generates a java varargs forwarder method  which makes it possible to write something like this:         and then to call this method from java without needing to create a  :         which is pretty nice.    unfortunately the forwarding part doesn't seem to happen when the method is abstract:         now if we have this java code:         we get this exception (at runtime):         we can confirm the problem with  :         so nope  the forwarder definitely isn't getting implemented.    putting the annotation on both   methods fails to compile:         and of course putting the annotation only on the   in   means we can't use the forwarder from a   instance.    this seems like it must be a bug  but it also seems extremely easy to run into  and i'm not seeing anything in the issue tracker. am i using   correctly? if so  is there a workaround that would make it do what you'd expect here?  "
       }
